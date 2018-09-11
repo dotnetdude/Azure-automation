@@ -1,0 +1,14 @@
+[Unit]
+Description=vsts-agentX
+After=docker.service network.target
+Requires=docker.service network.target
+
+[Service]
+TimeoutStartSec=0
+ExecStartPre=-/usr/bin/docker kill vsts-agent1
+ExecStartPre=-/usr/bin/docker rm vsts-agent1
+ExecStartPre=/usr/bin/docker pull microsoft/vsts-agent:ubuntu-16.04-docker-17.12.0-ce-standard
+ExecStart=/usr/bin/docker run --name vsts-agent1 -e VSTS_ACCOUNT=<Account> -e VSTS_TOKEN=<Token> -e VSTS_POOL=ubuntu-16-04-docker-17-12-0-ce-standard -v /var/run/docker.sock:/var/run/docker.sock microsoft/vsts-agent:ubuntu-16.04-docker-17.12.0-ce-standard
+
+[Install]
+WantedBy=multi-user.target

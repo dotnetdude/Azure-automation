@@ -1,0 +1,153 @@
+{
+    "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "commonName": {
+            "type": "string",
+            "defaultValue": "vsts01"
+        },
+        "locationShort": {
+            "type": "string",
+            "defaultValue": "we"
+        },
+        "environmentShort": {
+            "type": "string",
+            "defaultValue": "dev"
+        },
+        "virtualMachineSize": {
+            "type": "string",
+            "defaultValue": "Standard_DS3_v2"
+        },
+        "diskSizeGB": {
+            "type": "int",
+            "defaultValue": 31
+        },
+        "adminUsername": {
+            "type": "string",
+            "defaultValue": "admusr"
+        },
+        "adminPublicKey": {
+            "type": "string",
+            "defaultValue": "ssh-rsa A[...]="
+        },
+        "virtualNetworkRG": {
+            "type": "string",
+            "defaultValue": "_EXISTING_RG_NAME_"
+        },
+        "virtualNetworkName": {
+            "type": "string",
+            "defaultValue": "_EXISTING_VNET_NAME_"
+        },
+        "subnetName": {
+            "type": "string",
+            "defaultValue": "_EXISTING_SUBNET_NAME_"
+        },
+        "VstsAccount": {
+            "type": "string",
+            "defaultValue": "xenitab-pub"
+        },
+        "VstsToken": {
+            "type": "string"
+        }
+    },
+    "variables": {
+        "vnetId": "[resourceId(parameters('virtualNetworkRG'),'Microsoft.Network/virtualNetworks', parameters('virtualNetworkName'))]",
+        "subnetRef": "[concat(variables('vnetId'), '/subnets/', parameters('subnetName'))]",
+        "envLocation": "[concat(parameters('environmentShort'), '-', parameters('locationShort'))]",
+        "vmName": "[concat('vm-', variables('envLocation'), '-', parameters('commonName'))]",
+        "nic1Name": "[concat('nic-', variables('vmName'))]",
+        "osDisk1Name": "[concat('osdisk-', variables('vmName'))]",
+        "coreosIgnitionConfig": "[concat('{\"ignition\":{\"version\":\"2.2.0\"},\"systemd\":{\"units\":[{\"name\":\"docker.service\",\"enabled\":true},{\"name\":\"vsts-agent1.service\",\"enabled\":true,\"contents\":\"[Unit]\\nDescription=vsts-agent1\\nAfter=docker.service network.target\\nRequires=docker.service network.target\\n\\n[Service]\\nTimeoutStartSec=0\\nExecStartPre=-/usr/bin/docker kill vsts-agent1\\nExecStartPre=-/usr/bin/docker rm vsts-agent1\\nExecStartPre=/usr/bin/docker pull microsoft/vsts-agent:ubuntu-16.04-docker-17.12.0-ce-standard\\nExecStart=/usr/bin/docker run --name vsts-agent1 -e VSTS_ACCOUNT=', parameters('VstsAccount'), ' -e VSTS_TOKEN=', parameters('VstsToken'), ' -e VSTS_POOL=ubuntu-16-04-docker-17-12-0-ce-standard -v /var/run/docker.sock:/var/run/docker.sock microsoft/vsts-agent:ubuntu-16.04-docker-17.12.0-ce-standard\\n\\n[Install]\\nWantedBy=multi-user.target\"},{\"name\":\"vsts-agent2.service\",\"enabled\":true,\"contents\":\"[Unit]\\nDescription=vsts-agent2\\nAfter=docker.service network.target vsts-agent1.service\\nRequires=docker.service network.target vsts-agent1.service\\n\\n[Service]\\nTimeoutStartSec=0\\nExecStartPre=-/usr/bin/docker kill vsts-agent2\\nExecStartPre=-/usr/bin/docker rm vsts-agent2\\nExecStartPre=/usr/bin/docker pull microsoft/vsts-agent:ubuntu-16.04-docker-17.12.0-ce-standard\\nExecStart=/usr/bin/docker run --name vsts-agent2 -e VSTS_ACCOUNT=', parameters('VstsAccount'), ' -e VSTS_TOKEN=', parameters('VstsToken'), ' -e VSTS_POOL=ubuntu-16-04-docker-17-12-0-ce-standard -v /var/run/docker.sock:/var/run/docker.sock microsoft/vsts-agent:ubuntu-16.04-docker-17.12.0-ce-standard\\n\\n[Install]\\nWantedBy=multi-user.target\"},{\"name\":\"vsts-agent3.service\",\"enabled\":true,\"contents\":\"[Unit]\\nDescription=vsts-agent3\\nAfter=docker.service network.target vsts-agent1.service\\nRequires=docker.service network.target vsts-agent1.service\\n\\n[Service]\\nTimeoutStartSec=0\\nExecStartPre=-/usr/bin/docker kill vsts-agent3\\nExecStartPre=-/usr/bin/docker rm vsts-agent3\\nExecStartPre=/usr/bin/docker pull microsoft/vsts-agent:ubuntu-16.04-docker-17.12.0-ce-standard\\nExecStart=/usr/bin/docker run --name vsts-agent3 -e VSTS_ACCOUNT=', parameters('VstsAccount'), ' -e VSTS_TOKEN=', parameters('VstsToken'), ' -e VSTS_POOL=ubuntu-16-04-docker-17-12-0-ce-standard -v /var/run/docker.sock:/var/run/docker.sock microsoft/vsts-agent:ubuntu-16.04-docker-17.12.0-ce-standard\\n\\n[Install]\\nWantedBy=multi-user.target\"},{\"name\":\"vsts-agent4.service\",\"enabled\":true,\"contents\":\"[Unit]\\nDescription=vsts-agent4\\nAfter=docker.service network.target vsts-agent1.service\\nRequires=docker.service network.target vsts-agent1.service\\n\\n[Service]\\nTimeoutStartSec=0\\nExecStartPre=-/usr/bin/docker kill vsts-agent4\\nExecStartPre=-/usr/bin/docker rm vsts-agent4\\nExecStartPre=/usr/bin/docker pull microsoft/vsts-agent:ubuntu-16.04-docker-17.12.0-ce-standard\\nExecStart=/usr/bin/docker run --name vsts-agent4 -e VSTS_ACCOUNT=', parameters('VstsAccount'), ' -e VSTS_TOKEN=', parameters('VstsToken'), ' -e VSTS_POOL=ubuntu-16-04-docker-17-12-0-ce-standard -v /var/run/docker.sock:/var/run/docker.sock microsoft/vsts-agent:ubuntu-16.04-docker-17.12.0-ce-standard\\n\\n[Install]\\nWantedBy=multi-user.target\"}]}}')]"
+    },
+    "resources": [
+        {
+            "type": "Microsoft.Compute/virtualMachines",
+            "name": "[variables('vmName')]",
+            "apiVersion": "2018-04-01",
+            "location": "[resourceGroup().location]",
+            "properties": {
+                "osProfile": {
+                    "computerName": "[variables('vmName')]",
+                    "adminUsername": "[parameters('adminUsername')]",
+                    "customData": "[base64(variables('coreosIgnitionConfig'))]",
+                    "linuxConfiguration": {
+                        "disablePasswordAuthentication": "true",
+                        "ssh": {
+                            "publicKeys": [
+                                {
+                                    "path": "[concat('/home/', parameters('adminUsername'), '/.ssh/authorized_keys')]",
+                                    "keyData": "[parameters('adminPublicKey')]"
+                                }
+                            ]
+                        }
+                    }
+                },
+                "hardwareProfile": {
+                    "vmSize": "[parameters('virtualMachineSize')]"
+                },
+                "storageProfile": {
+                    "imageReference": {
+                        "publisher": "CoreOS",
+                        "offer": "CoreOS",
+                        "sku": "Stable",
+                        "version": "latest"
+                    },
+                    "osDisk": {
+                        "name": "[variables('osDisk1Name')]",
+                        "createOption": "fromImage",
+                        "diskSizeGB": "[parameters('diskSizeGB')]",
+                        "managedDisk": {
+                            "storageAccountType": "Premium_LRS"
+                        }
+                    },
+                    "dataDisks": []
+                },
+                "networkProfile": {
+                    "networkInterfaces": [
+                        {
+                            "id": "[resourceId('Microsoft.Network/networkInterfaces', variables('nic1Name'))]"
+                        }
+                    ]
+                }
+            },
+            "dependsOn": [
+                "[concat('Microsoft.Network/networkInterfaces/', variables('nic1Name'))]"
+            ]
+        },
+        {
+            "type": "Microsoft.Network/networkInterfaces",
+            "name": "[variables('nic1Name')]",
+            "apiVersion": "2018-04-01",
+            "location": "[resourceGroup().location]",
+            "properties": {
+                "ipConfigurations": [
+                    {
+                        "name": "ipconfig1",
+                        "properties": {
+                            "subnet": {
+                                "id": "[variables('subnetRef')]"
+                            },
+                            "privateIPAllocationMethod": "Dynamic"
+                        }
+                    }
+                ]
+            },
+            "dependsOn": []
+        }
+    ],
+    "outputs": {
+        "adminUsername": {
+            "type": "string",
+            "value": "[parameters('adminUsername')]"
+        },
+        "vmName": {
+            "type": "string",
+            "value": "[variables('vmName')]"
+
+        },
+        "privateIP": {
+            "type": "string",
+            "value": "[reference(concat('Microsoft.Network/networkInterfaces/', variables('nic1Name'))).ipConfigurations[0].properties.privateIPAddress]"
+        }
+    }
+}

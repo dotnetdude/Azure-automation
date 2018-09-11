@@ -1,20 +1,25 @@
-# Introduction 
-TODO: Give a short introduction of your project. Let this section explain the objectives or the motivation behind this project. 
+# Deploy CoreOS node with VSTS Agent (Docker container)
+This is a template allows you to create a Virtual Machine in Azure running CoreOS (Stable) which starts four (4) VSTS Agents (Azure DevOps Agents?) using Docker Containers.
 
-# Getting Started
-TODO: Guide users through getting your code up and running on their own system. In this section you can talk about:
-1.	Installation process
-2.	Software dependencies
-3.	Latest releases
-4.	API references
+# Before deployment
+Make sure you have the following parameters in the [azuredeploy.parameters.json](azuredeploy.parameters.json) file:
+- adminPublicKey (SSH Public key)
+- virtualNetworkRG (Existing resource group where the virtual network the node is being deployed to)
+- virtualNetworkName (Existing virtual network in the above resource group)
+- subnetName (Existing subnet in the above virtual network)
+- VstsAccount (Account for VSTS / Azure DevOps)
+- VstsToken (Token for VSTS / Azure DevOps)
 
-# Build and Test
-TODO: Describe and show how to build your code and run the tests. 
+The other parameters should be change to match your environment. If you are using the default values the following resources will be created:
+- Virtual Machine: vm-we-dev-vsts01
+- OS Disk: osdisk-vm-we-dev-vsts01
+- NIC: nic-vm-we-dev-vsts01
 
-# Contribute
-TODO: Explain how other users and developers can contribute to make your code better. 
+To modify the naming, change the variables.
 
-If you want to learn more about creating good readme files then refer the following [guidelines](https://www.visualstudio.com/en-us/docs/git/create-a-readme). You can also seek inspiration from the below readme files:
-- [ASP.NET Core](https://github.com/aspnet/Home)
-- [Visual Studio Code](https://github.com/Microsoft/vscode)
-- [Chakra Core](https://github.com/Microsoft/ChakraCore)
+# For readability
+The ignition configuration that is used in the customData can be found here:
+[ignition.json](ignition.json)
+
+The service definition in the ignition configuration can be found here:
+[vsts-agentX.service](vsts-agentX.service)

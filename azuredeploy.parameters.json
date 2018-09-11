@@ -1,0 +1,42 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "commonName": {
+            "value": "vsts01"
+        },
+        "locationShort": {
+            "value": "we"
+        },
+        "environmentShort": {
+            "value": "dev"
+        },
+        "virtualMachineSize": {
+            "value": "Standard_DS3_v2"
+        },
+        "diskSizeGB": {
+            "value": 31
+        },
+        "adminUsername": {
+            "value": "admusr"
+        },
+        "adminPublicKey": {
+            "value": "_EXISTING_SSH_PUB_KEY_"
+        },
+        "virtualNetworkRG": {
+            "value": "_EXISTING_RG_NAME_"
+        },
+        "virtualNetworkName": {
+            "value": "_EXISTING_VNET_NAME_"
+        },
+        "subnetName": {
+            "value": "_EXISTING_SUBNET_NAME_"
+        },
+        "VstsAccount": {
+            "value": "_EXISTING_VSTS_ACCOUNT_"
+        },
+        "VstsToken": {
+            "value": "_EXISTING_VSTS_TOKEN_"
+        }
+    }
+}
