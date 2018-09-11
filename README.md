@@ -17,6 +17,8 @@ The other parameters should be change to match your environment. If you are usin
 
 To modify the naming, change the variables.
 
+An Agent Pool needs to be created named: ubuntu-16-04-docker-17-12-0-ce-standard
+
 # For readability
 The ignition configuration that is used in the customData can be found here:
 [ignition.json](ignition.json)
