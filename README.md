@@ -11,9 +11,9 @@ Make sure you have the following parameters in the [azuredeploy.parameters.json]
 - VstsToken (Token for VSTS / Azure DevOps)
 
 The other parameters should be change to match your environment. If you are using the default values the following resources will be created:
-- Virtual Machine: vm-we-dev-vsts01
-- OS Disk: osdisk-vm-we-dev-vsts01
-- NIC: nic-vm-we-dev-vsts01
+- Virtual Machine: vm-dev-we-vsts01
+- OS Disk: osdisk-vm-dev-we-vsts01
+- NIC: nic-vm-dev-we-vsts01
 
 To modify the naming, change the variables.
 
