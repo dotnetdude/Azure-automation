@@ -3,48 +3,37 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "commonName": {
-            "type": "string",
-            "defaultValue": "vsts01"
+            "type": "string"
         },
         "locationShort": {
-            "type": "string",
-            "defaultValue": "we"
+            "type": "string"
         },
         "environmentShort": {
-            "type": "string",
-            "defaultValue": "dev"
+            "type": "string"
         },
         "virtualMachineSize": {
-            "type": "string",
-            "defaultValue": "Standard_DS3_v2"
+            "type": "string"
         },
         "diskSizeGB": {
-            "type": "int",
-            "defaultValue": 31
+            "type": "int"
         },
         "adminUsername": {
-            "type": "string",
-            "defaultValue": "admusr"
+            "type": "string"
         },
         "adminPublicKey": {
-            "type": "string",
-            "defaultValue": "ssh-rsa A[...]="
+            "type": "string"
         },
         "virtualNetworkRG": {
-            "type": "string",
-            "defaultValue": "_EXISTING_RG_NAME_"
+            "type": "string"
         },
         "virtualNetworkName": {
-            "type": "string",
-            "defaultValue": "_EXISTING_VNET_NAME_"
+            "type": "string"
         },
         "subnetName": {
-            "type": "string",
-            "defaultValue": "_EXISTING_SUBNET_NAME_"
+            "type": "string"
         },
         "VstsAccount": {
-            "type": "string",
-            "defaultValue": "xenitab-pub"
+            "type": "string"
         },
         "VstsToken": {
             "type": "string"
