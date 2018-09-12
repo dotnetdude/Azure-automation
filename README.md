@@ -1,5 +1,6 @@
 # Deploy CoreOS node with VSTS Agent (Docker container)
 This is a template allows you to create a Virtual Machine in Azure running CoreOS (Stable) which starts four (4) VSTS Agents (Azure DevOps Agents?) using Docker Containers.
+Repository for the blog post: [Deploy CoreOS with VSTS Agent container using ARM template](https://tech.xenit.se/deploy-coreos-with-vsts-agent-container-using-arm-template/)
 
 # Before deployment
 Make sure you have the following parameters in the [azuredeploy.parameters.json](azuredeploy.parameters.json) file:
