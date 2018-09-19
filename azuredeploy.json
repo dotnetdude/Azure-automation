@@ -58,7 +58,7 @@
                 "osProfile": {
                     "computerName": "[variables('vmName')]",
                     "adminUsername": "[parameters('adminUsername')]",
-                    "customData": "[if(equals(reference(concat('Microsoft.Compute/virtualMachines/', variables('vmName'))).provisioningState, 'Succeeded'), json('null'), base64(variables('coreosIgnitionConfig')))]",
+                    "customData": "[base64(variables('coreosIgnitionConfig'))]",
                     "linuxConfiguration": {
                         "disablePasswordAuthentication": "true",
                         "ssh": {
