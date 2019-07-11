@@ -1,3 +1,11 @@
+<a href="https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fdotnetdude%2FAzure-automation%2Fmaster%2Fazuredeploy.json" target="_blank">
+    <img src="http://azuredeploy.net/deploybutton.png"/>
+</a>
+<a href="http://armviz.io/#/?https%3A%2F%2Fraw.githubusercontent.com%2Fdotnetdude%2FAzure-automation%2Fmaster%2Fazuredeploy.json" target="_blank">
+    <img src="http://armviz.io/visualizebutton.png"/>
+</a>
+
+
 # Deploy CoreOS node with VSTS Agent (Docker container)
 This is a template allows you to create a Virtual Machine in Azure running CoreOS (Stable) which starts four (4) VSTS Agents (Azure DevOps Agents?) using Docker Containers.
 Repository for the blog post: [Deploy CoreOS with VSTS Agent container using ARM template](https://tech.xenit.se/deploy-coreos-with-vsts-agent-container-using-arm-template/)
@@ -26,3 +34,4 @@ The ignition configuration that is used in the customData can be found here:
 
 The service definition in the ignition configuration can be found here:
 [vsts-agentX.service](vsts-agentX.service)
+
